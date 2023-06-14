@@ -12,13 +12,18 @@ import {
   getClientIdGoogle,
   getClientSecretGoogle,
   getJwtProviderAuthLifetime,
-  getJwtProviderAuthSecret
+  getJwtProviderAuthSecret,
+  getSamlEntrypoint,
+  getSamlIssuer,
+  getSamlCert,
+  getSamlAudience
 } from '../config';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-// TODO: find a more optimal folder structure to store these types of functions
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const SamlStrategy = require('@node-saml/passport-saml').Strategy;
 
 /**
  * Returns an object containing the id of the authentication data payload
@@ -38,7 +43,6 @@ const getAuthDataPayloadIdObj = (authData: AuthData) => {
     return { serviceTokenDataId: authData.authPayload._id };
   }
 };
-
 
 /**
  * Returns an object containing the user associated with the authentication data payload
@@ -61,13 +65,10 @@ const getAuthDataPayloadUserObj = (authData: AuthData) => {
 }
 
 const initializePassport = async () => {
-  const googleClientSecret = await getClientSecretGoogle();
-  const googleClientId = await getClientIdGoogle();
-
   passport.use(new GoogleStrategy({
     passReqToCallback: true,
-    clientID: googleClientId,
-    clientSecret: googleClientSecret,
+    clientID: await getClientIdGoogle(),
+    clientSecret: await getClientSecretGoogle(),
     callbackURL: '/api/v1/auth/callback/google',
     scope: ['profile', ' email'],
   }, async (
@@ -109,6 +110,20 @@ const initializePassport = async () => {
       cb(null, false);
     }
   }));
+
+  passport.use(
+    new SamlStrategy({
+      path: '/api/v1/auth/callback/okta',
+      entryPoint: await getSamlEntrypoint(),
+      issuer: await getSamlIssuer(),
+      cert: await getSamlCert(),
+      audience: await getSamlAudience()
+    },
+    function (profile: any, done: any) {
+      // TODO
+      return done(null, profile);
+    }),
+  );
 }
 
 export {
@@ -116,3 +131,5 @@ export {
   getAuthDataPayloadUserObj,
   initializePassport,
 }
+
+

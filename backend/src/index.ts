@@ -66,7 +66,11 @@ import { healthCheck } from "./routes/status";
 import { getLogger } from "./utils/logger";
 import { RouteNotFoundError } from "./utils/errors";
 import { requestErrorHandler } from "./middleware/requestErrorHandler";
-import { getNodeEnv, getPort, getSiteURL } from "./config";
+import { 
+  getNodeEnv, 
+  getPort, 
+  getSiteURL
+} from "./config";
 import { setup } from "./utils/setup";
 
 const main = async () => {
@@ -77,6 +81,7 @@ const main = async () => {
   const app = express();
   app.enable("trust proxy");
   app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
   app.use(cookieParser());
   app.use(
     cors({

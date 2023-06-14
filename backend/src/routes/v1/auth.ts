@@ -54,9 +54,26 @@ router.get(
 );
 
 router.get(
+  '/redirect/okta',
+  authLimiter,
+  passport.authenticate('saml', {
+    failureRedirect: '/login/fail' // TODO: configure a different fail redirect
+  })
+);
+
+router.get(
   '/callback/google',
   passport.authenticate('google', { failureRedirect: '/login/provider/error', session: false }),
   authController.handleAuthProviderCallback,
+);
+
+// should this be more generic than okta?
+router.post('/callback/okta',
+  passport.authenticate('saml', { failureRedirect: '/login/provider/error', failureFlash: true }),
+  function(req, res) {
+    console.log('Successful okta callback');
+    res.redirect('/login');
+  }
 );
 
 router.get(

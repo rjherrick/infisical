@@ -57,6 +57,11 @@ export const getSmtpPassword = async () => (await client.getSecret('SMTP_PASSWOR
 export const getSmtpFromAddress = async () => (await client.getSecret('SMTP_FROM_ADDRESS')).secretValue;
 export const getSmtpFromName = async () => (await client.getSecret('SMTP_FROM_NAME')).secretValue || 'Infisical';
 
+export const getSamlEntrypoint = async () => (await client.getSecret('SAML_ENTRYPOINT')).secretValue;
+export const getSamlIssuer = async () => (await client.getSecret('SAML_ISSUER')).secretValue;
+export const getSamlCert = async () => (await client.getSecret('SAML_CERT')).secretValue;
+export const getSamlAudience = async () => (await client.getSecret('SAML_AUDIENCE')).secretValue;
+
 export const getLicenseKey = async () => {
   const secretValue = (await client.getSecret('LICENSE_KEY')).secretValue;
   return secretValue === '' ? undefined : secretValue;

@@ -22,6 +22,7 @@ export default function InitialSignupStep({
                 variant="solid"
                 onClick={() => {
                     window.open('/api/v1/auth/redirect/google')
+                    window.open('/api/v1/auth/redirect/okta');
                 }}
                 leftIcon={<FontAwesomeIcon icon={faGoogle} className="mr-1" />}
                 className="h-14 w-full mx-0"
