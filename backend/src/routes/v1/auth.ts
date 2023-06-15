@@ -67,12 +67,18 @@ router.get(
   authController.handleAuthProviderCallback,
 );
 
+router.get(
+  '/callback/saml',
+  passport.authenticate('saml', { failureRedirect: '/login/provider/error', session: false }),
+  authController.handleAuthProviderCallback,
+);
+
 // should this be more generic than okta?
-router.post('/callback/okta',
+router.post('/callback/okta/:organizationId',
   passport.authenticate('saml', { failureRedirect: '/login/provider/error', failureFlash: true }),
   function(req, res) {
     console.log('Successful okta callback');
-    res.redirect('/login');
+    res.redirect('http://localhost:8080/login');
   }
 );
 
