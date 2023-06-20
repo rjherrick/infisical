@@ -72,6 +72,12 @@ export const addOrganizationPmtMethod = async (req: Request, res: Response) => {
     }); 
 }
 
+/**
+ * Delete organization payment method with id [pmtMethodId]
+ * @param req 
+ * @param res 
+ * @returns 
+ */
 export const deleteOrganizationPmtMethod = async (req: Request, res: Response) => {
     const { pmtMethodId } = req.params;
 

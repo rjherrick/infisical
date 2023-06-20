@@ -2,7 +2,7 @@ import { Schema, model, Types, Document } from 'mongoose';
 
 export enum AuthProvider {
 	GOOGLE = 'google',
-	OKTA_SAML = 'okta-saml'
+	OKTA_SAML = 'OktaSAML'
 }
 
 export interface IUser extends Document {

@@ -7,8 +7,8 @@ export default function LoginProviderSuccess() {
     const router = useRouter();
 
     useEffect(() => {
-        const { token } = router.query;
-        SecurityClient.setProviderAuthToken(token as string);
+        const { state } = router.query;
+        SecurityClient.setProviderAuthToken(state as string);
         window.close();
     }, [])
 

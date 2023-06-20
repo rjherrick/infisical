@@ -42,6 +42,12 @@ interface VerifyMfaTokenError {
   };
 }
 
+type Props = {
+  email: string;
+  password: string;
+  providerAuthToken?: string;
+}
+
 /**
  * 2nd step of login - users enter their MFA code
  * @param {Object} obj
@@ -54,11 +60,7 @@ export default function MFAStep({
   email,
   password,
   providerAuthToken,
-}: {
-  email: string;
-  password: string;
-  providerAuthToken?: string;
-}): JSX.Element {
+}: Props): JSX.Element {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingResend, setIsLoadingResend] = useState(false);

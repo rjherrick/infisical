@@ -17,9 +17,9 @@ export const publicPaths = [
   `/subprocessors`,
   `/verify-email`,
   `/password-reset`,
-  `/saml-sso`,
   `/login/provider/success`,
-  `/login/provider/error`
+  `/login/provider/error`,
+  `/login/saml`
 ];
 
 export const languageMap = {

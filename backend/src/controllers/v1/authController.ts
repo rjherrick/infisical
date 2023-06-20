@@ -287,5 +287,5 @@ export const getNewToken = async (req: Request, res: Response) => {
 
 export const handleAuthProviderCallback = (req: Request, res: Response) => {
   console.log('handleAuthProviderCallback');
-  res.redirect(`/login/provider/success?token=${encodeURIComponent(req.providerAuthToken)}`);
+  res.redirect(`/login/provider/success?state=${encodeURIComponent(req.providerAuthToken)}`);
 }

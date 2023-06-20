@@ -4,21 +4,22 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
-// import ListBox from '@app/components/basic/Listbox';
-import InitialLoginStep from '@app/components/login/InitialLoginStep';
+import LoginStep from '~/components/login/LoginStep';
+import SAMLStep from '@app/components/login/SAMLStep';
 import MFAStep from '@app/components/login/MFAStep';
 import PasswordInputStep from '@app/components/login/PasswordInputStep';
 import { useProviderAuth } from '@app/hooks/useProviderAuth';
 import { isLoggedIn } from '@app/reactQuery';
 
-import getWorkspaces from './api/workspace/getWorkspaces';
+// import getWorkspaces from '../../api/workspace/getWorkspaces';
+
+import getWorkspaces from '../api/workspace/getWorkspaces';
 
 export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState('main');
   const { t } = useTranslation();
   // const lang = router.locale ?? 'en';
   const {
@@ -27,10 +28,12 @@ export default function Login() {
     setProviderAuthToken,
     isProviderUserCompleted
   } = useProviderAuth();
-
-  if (providerAuthToken && isProviderUserCompleted === false) {
-    router.push(`/signup?providerAuthToken=${encodeURIComponent(providerAuthToken)}`);
-  }
+  
+  useEffect(() => {
+    if (providerAuthToken && isProviderUserCompleted === false) {
+      router.push(`/signup?providerAuthToken=${encodeURIComponent(providerAuthToken)}`); // this goes to signup
+    }
+  }, [providerAuthToken]);
 
   // const setLanguage = async (to: string) => {
   //   router.push('/login', '/login', { locale: to });
@@ -54,10 +57,10 @@ export default function Login() {
     }
   }, []);
 
-  const renderView = (loginStep: number) => {
-    if (providerAuthToken && step === 1) {
+  const renderView = () => {
+    if (providerAuthToken) {
       return (
-        <PasswordInputStep
+        <PasswordInputStep // can this be moved out to its own page?
           email={providerEmail}
           password={password}
           providerAuthToken={providerAuthToken}
@@ -67,28 +70,35 @@ export default function Login() {
         />
       );
     }
-
-    if (loginStep === 1) {
-      return <InitialLoginStep 
-        setStep={setStep}
-        email={email}
-        setEmail={setEmail}
-        password={password}
-        setPassword={setPassword}
-      />;
+    
+    switch (step) {
+      case 'main':
+        return (
+          <LoginStep 
+            setStep={setStep}
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+          />
+        );
+      case 'saml':
+        return (
+          <SAMLStep 
+            setStep={setStep}
+          />
+        );
+      case 'mfa':
+        return (
+          <MFAStep
+            email={email || providerEmail}
+            password={password}
+            providerAuthToken={providerAuthToken}
+          />
+        );
+      default:
+        return <div />
     }
-
-    if (step === 2) {
-      return (
-        <MFAStep
-          email={email || providerEmail}
-          password={password}
-          providerAuthToken={providerAuthToken}
-        />
-      );
-    }
-
-    return <div />;
   };
 
   return (
@@ -105,7 +115,7 @@ export default function Login() {
           <Image src="/images/gradientLogo.svg" height={90} width={120} alt="Infisical logo" />
         </div>
       </Link>
-      {renderView(step)}
+      {renderView()}
       {/* <div className="absolute right-4 top-0 mt-4 flex items-center justify-center">
         <div className="mx-auto w-48">
           <ListBox

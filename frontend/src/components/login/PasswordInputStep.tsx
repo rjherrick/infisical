@@ -2,12 +2,19 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
 import Error from '@app/components/basic/Error';
 import attemptLogin from '@app/components/utilities/attemptLogin';
-
 import SecurityClient from '../utilities/SecurityClient';
 import { Button, Input } from '../v2';
+
+type Props = {
+  email: string;
+  password: string;
+  providerAuthToken: string;
+  setPassword: (password: string) => void;
+  setProviderAuthToken: (value: string) => void;
+  setStep: (step: string) => void;
+}
 
 export default function PasswordInputStep({
   email,
@@ -16,14 +23,7 @@ export default function PasswordInputStep({
   setPassword,
   setProviderAuthToken,
   setStep
-}: {
-  email: string;
-  password: string;
-  providerAuthToken: string;
-  setPassword: (password: string) => void;
-  setProviderAuthToken: (value: string) => void;
-  setStep: (step: number) => void;
-}) {
+}: Props) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState(false);
@@ -44,7 +44,7 @@ export default function PasswordInputStep({
 
         if (loginAttempt.mfaEnabled) {
           // case: login requires MFA step
-          setStep(2);
+          setStep('mfa');
           setIsLoading(false);
           return;
         }

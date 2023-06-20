@@ -28,7 +28,8 @@ import {
   OrgIncidentContactsTable,
   OrgMembersTable,
   OrgNameChangeSection,
-  OrgServiceAccountsTable
+  OrgServiceAccountsTable,
+  OrgSAMLDetailsSection
 } from './components';
 
 export const OrgSettingsPage = () => {
@@ -284,6 +285,7 @@ export const OrgSettingsPage = () => {
             />
           </div>
         </div>
+        <OrgSAMLDetailsSection />
         {/* <div className="border-l border-red pb-4 pl-6 flex flex-col items-start flex flex-col items-start w-full mb-6 mt-4 pt-2 max-w-6xl">
 							<p className="text-xl font-bold text-red">
 								Danger Zone

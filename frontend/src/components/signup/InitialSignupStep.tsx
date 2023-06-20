@@ -47,7 +47,10 @@ export default function InitialSignupStep({
             <Button
                 colorSchema="primary" 
                 variant="outline_bg"
-                onClick={() => router.push("/saml-sso")} 
+                onClick={() => {
+                    // window.open('/saml-sso');
+                    // router.push("/saml-sso")
+                }}
                 isFullWidth
                 className="h-14 w-full mx-0"
             > 

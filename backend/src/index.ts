@@ -9,7 +9,6 @@ import { DatabaseService } from "./services";
 import { EELicenseService } from "./ee/services";
 import { setUpHealthEndpoint } from "./services/health";
 import cookieParser from "cookie-parser";
-import session from "express-session";
 import swaggerUi = require("swagger-ui-express");
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const swaggerFile = require("../spec.json");
@@ -73,7 +72,6 @@ import {
   getSiteURL
 } from "./config";
 import { setup } from "./utils/setup";
-import passport from 'passport';
 
 const main = async () => {
   await setup();
@@ -84,14 +82,7 @@ const main = async () => {
   app.enable("trust proxy");
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
-  app.use(passport.initialize());
   app.use(cookieParser());
-  // app.use(session({
-  //   secret: 'your_secret_key', // Replace with your own secret key
-  //   resave: false,
-  //   saveUninitialized: true,
-  //   cookie: { secure: true } // Use secure cookies in a production environment (HTTPS)
-  // }));
 
   app.use(
     cors({
